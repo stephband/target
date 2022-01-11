@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="stephband" />
+    <meta name="description" content="Test the target selector" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Missing the :target</title>
+
+    <style>
+        :target {
+            color: white;
+            background-color: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="x1 3x @1-x3 @1-4x @2-x4">
+        <h1>Missing the :target</h1>
+        <p>Test for dynamic update of :target styles</p>
+    </header>
+
+    <a href="#">None</a>
+    <a href="#one">#one</a>
+    <a href="#two">#two</a>
+    <a href="#three">#three</a>
+    <a href="#four">#four</a>
+    <button type="button" name="location" value="#one">history.pushState(#one)</button>
+
+    <h2>Targets</h2>
+
+    <pre id="one">Target #one</pre>
+    <pre id="two">Target #two</pre>
+
+    <h2>Problems with the <code>:target</code> selector</h2>
+
+    <section style="max-width: 40em;">
+        <h3>1 – The location hash and the selected <code>:target</code> become desynchronised when navigating via <code>window.history</code></h3>
+        <p>Click on the links <a href="#one">#one</a>, <a href="#two">#two</a>, <a href="#three">#three</a> or <a href="#four">#four</a> and the corresponding target is highlighted.</p>
+        <p>Now click <button type="button" name="location" value="#one">history.pushState(#one)</button>.</p>
+        <p>The location hash has changed but target <code>#one</code> is not highlighted.</p>
+
+        <h3>2 – Matching elements added to the DOM on or after <code>load</code> are not selected by <code>:target</code></h3>
+        <p>Click on <a href="#four">#four</a>.</p>
+        <p>Now refresh the page.</p>
+        <p>Target <code>#four</code> was added to the DOM on <code>load</code>. It is not highlighted.</p>
+    </section>
+
+    <script type="module">
+        function addTestElement(element) {
+            const pres = document.querySelectorAll('pre');
+            pres[pres.length - 1].after(element);
+        }
+
+        // Add test element on DOMContentLoaded
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded');
+            const three = document.createElement('pre');
+            three.id        = 'three';
+            three.innerHTML = 'Target #three (added on DOMContentLoaded)';
+            addTestElement(three);
+        });
+
+        // Add test element on load
+        window.addEventListener('load', function() {
+            console.log('load');
+            const four = document.createElement('pre');
+            four.id        = 'four';
+            four.innerHTML = 'Target #four (added on load)';
+            addTestElement(four);
+        });
+
+        // Pick up clicks on [name="location"] buttons and turn them into history
+        document.addEventListener('click', function(e) {
+            if (e.target.name !== 'location') { return; }
+            window.history.pushState(null, '', e.target.value);
+        });
+    </script>
+</body>
