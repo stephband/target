@@ -32,7 +32,6 @@
     <h2>Targets</h2>
 
     <pre id="one">Target #one</pre>
-    <pre id="two">Target #two</pre>
 
     <h2>Problems with the <code>:target</code> selector</h2>
 
@@ -45,7 +44,8 @@
         <h3>2 – Matching elements added to the DOM on or after <code>load</code> are not selected by <code>:target</code></h3>
         <p>Click on <a href="#four">#four</a>. The location hash is <code>#four</code> and target <code>#four</code> is highlighted.</p>
         <p>Now refresh the page.</p>
-        <p>Target <code>#four</code> was added to the DOM on <code>load</code>. It is not highlighted.</p>
+        <p>Target <code>#four</code> was added to the DOM after <code>load</code>. It is not highlighted.</p>
+        <p>Browsers other than FireFox also have this problem with <a href="#three">#three</a>.</p>
     </section>
 
     <footer style="border-top: 1px solid #666666; margin-top: 4.5rem;">
@@ -60,21 +60,27 @@
 
         // Add test element on DOMContentLoaded
         window.addEventListener('DOMContentLoaded', function() {
-            console.log('DOMContentLoaded');
-            const three = document.createElement('pre');
-            three.id        = 'three';
-            three.innerHTML = 'Target #three (added on DOMContentLoaded)';
-            addTestElement(three);
+            const two = document.createElement('pre');
+            two.id        = 'two';
+            two.innerHTML = 'Target #two (added on DOMContentLoaded)';
+            addTestElement(two);
         });
 
         // Add test element on load
         window.addEventListener('load', function() {
-            console.log('load');
+            const three = document.createElement('pre');
+            three.id        = 'three';
+            three.innerHTML = 'Target #three (added on load)';
+            addTestElement(three);
+        });
+
+        // Add test element after a few seconds
+        setTimeout(function() {
             const four = document.createElement('pre');
             four.id        = 'four';
-            four.innerHTML = 'Target #four (added on load)';
+            four.innerHTML = 'Target #four (added after 1s)';
             addTestElement(four);
-        });
+        }, 1000);
 
         // Pick up clicks on [name="location"] buttons and turn them into history
         document.addEventListener('click', function(e) {
