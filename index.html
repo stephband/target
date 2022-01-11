@@ -18,8 +18,8 @@
 
 <body>
     <header class="x1 3x @1-x3 @1-4x @2-x4">
-        <h1>Missing the :target</h1>
-        <p>Test for dynamic update of :target styles</p>
+        <h1>Missing the <code>:target</code></h1>
+        <p>Tests for dynamic update of :target styles.</p>
     </header>
 
     <a href="#">None</a>
@@ -47,6 +47,10 @@
         <p>Now refresh the page.</p>
         <p>Target <code>#four</code> was added to the DOM on <code>load</code>. It is not highlighted.</p>
     </section>
+
+    <footer style="border-top: 1px solid #666666; margin-top: 4.5rem;">
+        <p>Repo at <a href="https://github.com/stephband/target">github.com/stephband/target</a></p>
+    </footer>
 
     <script type="module">
         function addTestElement(element) {
